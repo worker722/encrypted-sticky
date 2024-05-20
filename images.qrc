@@ -1,0 +1,19 @@
+<RCC>
+  <qresource>
+    <file>resources/qss/1.qss</file>
+    <file>resources/qss/2.qss</file>
+    <file>resources/qss/3.qss</file>
+    <file>resources/qss/4.qss</file>
+    <file>resources/qss/5.qss</file>
+    <file>resources/qss/6.qss</file>
+    <file>resources/qss/7.qss</file>
+    <file>resources/lock.svg</file>
+    <file>resources/unlock.svg</file>
+    <file>resources/plus.svg</file>
+    <file>resources/more-horizontal.svg</file>
+    <file>resources/x.svg</file>
+    <file>resources/list.svg</file>
+    <file>resources/image.svg</file>
+    <file>resources/trash-2_red.svg</file>
+  </qresource>
+</RCC>
