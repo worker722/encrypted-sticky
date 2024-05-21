@@ -5,19 +5,18 @@ Module implementing Note.
 """
 
 from PyQt5.QtCore import pyqtSlot, Qt, QTextStream, QFile
-from PyQt5.QtWidgets import QWidget, QSizeGrip, QFileDialog, QInputDialog, QLineEdit
-from PyQt5.QtGui import QFont, QTextCharFormat, QTextDocumentFragment, QTextListFormat, QIcon
+from PyQt5.QtWidgets import QWidget, QSizeGrip, QFileDialog, QDialog
+from PyQt5.QtGui import QFont, QTextCharFormat, QTextDocumentFragment, QTextListFormat, QIcon, QPainter
 
 from Design.Note_ui import Ui_Note
 from CustomWidgets.CDrawer import CDrawer
 from CustomWidgets.NoteMenu import NoteMenu
 from CustomWidgets.DeleteNoteDialog import DeleteNote
+from CustomWidgets.PasswordInputDialog import PasswordInputDialog
 from utils.NoteConfig import NoteConfig
-import time
 from utils.utils import debounce
 from utils.constants import CHANGE_TYPE
     
-
 class Note(QWidget, Ui_Note):
     def __init__(self, config, onSaveConfig, parent=None):
         super(Note, self).__init__(parent)
@@ -55,12 +54,21 @@ class Note(QWidget, Ui_Note):
             "QSizeGrip { width: 10px; height: 10px; margin: 5px }")
         self.sizegrip.setToolTip("Resize Window")
 
-    @debounce(2) 
+    def raiseToTop(self):
+        # it for always on top
+        # self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
+        self.show()
+        self.raise_()
+        self.activateWindow()
+    
+    @debounce(2)
     def onChangeConfig(self, _CHANGE):
+        print(self.config.key, _CHANGE)
         self.onSaveConfig(self.config, _CHANGE)
     
     def initUI(self, _conf: NoteConfig):
         self.config = _conf
+        self.lblTitle.setText(_conf.title)
         self.setBackground(_conf.backgroundIndex)
         self.setGeometry(_conf.posX, _conf.posY, _conf.width, _conf.height)
         self.changeVisibleStatus(_conf.isVisible)
@@ -86,13 +94,22 @@ class Note(QWidget, Ui_Note):
             return
         self.changeVisibleStatus(isVisible)
             
+    def inputPassword(self, title):
+        pwdDlg = PasswordInputDialog(title, self)
+        result = pwdDlg.exec_()
+        if result == QDialog.DialogCode.Accepted:
+            return (pwdDlg.password, True)
+        else:
+            return ("", False)
+        
     def toggleLock(self):
         if self.config.encrypted:
             if self.config.locked:
-                password, ok = QInputDialog.getText(self, 'Password Input Dialog', 'Enter your password:', QLineEdit.Password)
+                password, ok = self.inputPassword("Decrypt Your Note")
+                print(password, ok)
                 if ok and password:
                     note = self.config.decryptNote(password)
-                    if note:
+                    if note != False:
                         self.cryptPassword = password
                         self.textBrowser.setHtml(note)
                         self.pushButton_lock.setIcon(QIcon(':/resources/unlock.svg'))
@@ -108,7 +125,7 @@ class Note(QWidget, Ui_Note):
             isLocked = not self.config.locked
             self.changeLockStatus(isLocked)
         else:
-            password, ok = QInputDialog.getText(self, 'Encrypt your note', 'Enter your password:', QLineEdit.Password)
+            password, ok = self.inputPassword("Encrypt Your Note")
             if ok and password:
                 self.cryptPassword = password
                 self.config.encrypted = True
@@ -116,7 +133,8 @@ class Note(QWidget, Ui_Note):
                 self.changeLockStatus(True)
 
     def updatedConfig(self):
-        self.onChangeConfig(CHANGE_TYPE.UPDATE)
+        if self.onChangeConfig:
+            self.onChangeConfig(CHANGE_TYPE.UPDATE)
     
     def onTextChanged(self):
         text = self.textBrowser.toHtml().replace("\n", "")
@@ -132,17 +150,11 @@ class Note(QWidget, Ui_Note):
 
     @pyqtSlot()
     def on_pushButton_add_clicked(self):
-        """
-        Add a new window
-        """
         config = NoteConfig.emptyConfig()
         config.posY = self.config.posY + self.newCount * 40
-        config.posX = int(max(self.config.posX - self.config.width * 1.4 + self.newCount * 30, 0))
+        config.posX = int(max(self.config.posX + self.newCount * 30, 0))
         self.newCount += 1
-            
-        self.onChangeConfig(CHANGE_TYPE.ADD)
-        newNote = Note(config, self.onSaveConfig)
-        newNote.show()
+        self.onSaveConfig(config, CHANGE_TYPE.ADD)
 
     @pyqtSlot()
     def on_pushButton_menu_clicked(self):

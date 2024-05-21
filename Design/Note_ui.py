@@ -14,28 +14,36 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Note(object):
     def setupUi(self, Note):
         Note.setObjectName("Note")
-        Note.resize(290, 215)
-        Note.setStyleSheet("#frame_buttom{\n"
+        Note.resize(327, 236)
+        Note.setStyleSheet("#frame_buttom {\n"
 "    background-color: rgb(255, 247, 209);\n"
 "}\n"
-"QTextBrowser{\n"
-"border:none;\n"
-"font: 14pt \"MingLiU-ExtB\";\n"
-"background-color: rgb(255, 247, 209);\n"
+"\n"
+"QTextBrowser {\n"
+"    border: none;\n"
+"    background-color: rgb(255, 247, 209);\n"
 "}\n"
-"#frame_title{\n"
+"\n"
+"#frameContain {\n"
+"    background-color: rgb(255, 247, 209);\n"
+"}\n"
+"\n"
+"#frame_title {\n"
 "    background-color: rgb(255, 242, 171);\n"
 "}\n"
-"#frame{\n"
+"\n"
+"#frame {\n"
 "    border: none;\n"
 "}\n"
-"QPushButton{\n"
-"border:none;\n"
+"\n"
+"QPushButton {\n"
+"    border: none;\n"
 "}\n"
-"QPushButton:hover, QPushButton:checked{\n"
-"background: rgb(237, 230, 194);\n"
-"}\n"
-"")
+"\n"
+"QPushButton:hover,\n"
+"QPushButton:checked {\n"
+"    background: rgb(237, 230, 194);\n"
+"}")
         self.verticalLayout = QtWidgets.QVBoxLayout(Note)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setSpacing(0)
@@ -78,6 +86,31 @@ class Ui_Note(object):
         self.pushButton_add.setIconSize(QtCore.QSize(20, 20))
         self.pushButton_add.setObjectName("pushButton_add")
         self.horizontalLayout_2.addWidget(self.pushButton_add, 0, QtCore.Qt.AlignLeft)
+        self.frame_title_2 = QtWidgets.QFrame(self.frame_title)
+        self.frame_title_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_title_2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_title_2.setObjectName("frame_title_2")
+        self.gridLayout = QtWidgets.QGridLayout(self.frame_title_2)
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout.setSpacing(0)
+        self.gridLayout.setObjectName("gridLayout")
+        self.lblTitle = QtWidgets.QLabel(self.frame_title_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lblTitle.sizePolicy().hasHeightForWidth())
+        self.lblTitle.setSizePolicy(sizePolicy)
+        self.lblTitle.setMinimumSize(QtCore.QSize(0, 12))
+        self.lblTitle.setMaximumSize(QtCore.QSize(16777215, 12))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(11)
+        self.lblTitle.setFont(font)
+        self.lblTitle.setWordWrap(True)
+        self.lblTitle.setTextInteractionFlags(QtCore.Qt.TextEditable)
+        self.lblTitle.setObjectName("lblTitle")
+        self.gridLayout.addWidget(self.lblTitle, 0, 0, 1, 1)
+        self.horizontalLayout_2.addWidget(self.frame_title_2)
         self.frame = QtWidgets.QFrame(self.frame_title)
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -133,11 +166,19 @@ class Ui_Note(object):
         self.pushButton_close.setObjectName("pushButton_close")
         self.horizontalLayout.addWidget(self.pushButton_close)
         self.horizontalLayout_2.addWidget(self.frame, 0, QtCore.Qt.AlignRight)
+        self.horizontalLayout_2.setStretch(1, 1)
         self.verticalLayout_2.addWidget(self.frame_title, 0, QtCore.Qt.AlignTop)
-        self.textBrowser = QtWidgets.QTextBrowser(self.frame_outer)
+        self.frameContain = QtWidgets.QFrame(self.frame_outer)
+        self.frameContain.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frameContain.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frameContain.setObjectName("frameContain")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.frameContain)
+        self.gridLayout_2.setContentsMargins(9, 9, 9, 9)
+        self.gridLayout_2.setObjectName("gridLayout_2")
+        self.textBrowser = QtWidgets.QTextBrowser(self.frameContain)
         font = QtGui.QFont()
-        font.setFamily("MingLiU-ExtB")
-        font.setPointSize(14)
+        font.setFamily("Times New Roman")
+        font.setPointSize(11)
         font.setBold(False)
         font.setItalic(False)
         font.setWeight(50)
@@ -145,7 +186,8 @@ class Ui_Note(object):
         self.textBrowser.setStyleSheet("")
         self.textBrowser.setReadOnly(False)
         self.textBrowser.setObjectName("textBrowser")
-        self.verticalLayout_2.addWidget(self.textBrowser)
+        self.gridLayout_2.addWidget(self.textBrowser, 0, 0, 1, 1)
+        self.verticalLayout_2.addWidget(self.frameContain)
         self.frame_buttom = QtWidgets.QFrame(self.frame_outer)
         self.frame_buttom.setMinimumSize(QtCore.QSize(0, 48))
         font = QtGui.QFont()
@@ -256,11 +298,12 @@ class Ui_Note(object):
     def retranslateUi(self, Note):
         _translate = QtCore.QCoreApplication.translate
         Note.setWindowTitle(_translate("Note", "Form"))
+        self.lblTitle.setText(_translate("Note", "TextLabel"))
         self.textBrowser.setHtml(_translate("Note", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'MingLiU-ExtB\'; font-size:14pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
+"</style></head><body style=\" font-family:\'Times New Roman\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'MingLiU-ExtB\'; font-size:14pt;\"><br /></p></body></html>"))
         self.textBrowser.setPlaceholderText(_translate("Note", "Type text here..."))
         self.pushButton_bold.setText(_translate("Note", "B"))
         self.pushButton_italic.setText(_translate("Note", "I"))

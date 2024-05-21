@@ -1,20 +1,22 @@
-#frame_buttom, QTextBrowser{
+#frame_buttom,
+QTextBrowser,
+#frameContain {
     background-color: rgb(228, 249, 224);
 }
-QTextBrowser{
-border:none;
-font: 14pt "MingLiU-ExtB";
-background-color: rgb(228, 249, 224);
-}
-#frame_title{
+
+#frame_title {
     background-color: rgb(203, 241, 196);
 }
-#frame{
+
+#frame {
     border: none;
 }
-QPushButton{
-border:none;
+
+QPushButton {
+    border: none;
 }
-QPushButton:hover, QPushButton:checked{
-background: rgb(205, 224, 201);
+
+QPushButton:hover,
+QPushButton:checked {
+    background: rgb(205, 224, 201);
 }
